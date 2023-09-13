@@ -7,6 +7,7 @@ import Search from "./Search";
 import UserMenu from "./UserMenu";
 
 type NavbarProps = {};
+
 const Navbar = (props: NavbarProps) => {
   return (
     <div className="fixed w-full bg-white z-10 shadow-sm">
