@@ -4,28 +4,30 @@ import { useState, useCallback } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";
-import useRegisterModal from "@/hooks/zustand/useRegisterModal";
+import useLoginModal from "@/hooks/zustand/useLoginModal";
 import Modal from "./Modal";
 import Button from "../Button";
 import Input from "../inputs/Input";
 import Heading from "../Heading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import useLoginModal from "@/hooks/zustand/useLoginModal";
+import { useRouter } from "next/navigation";
+import useRegisterModal from "@/hooks/zustand/useRegisterModal";
 
 const schema = z.object({
-  name: z.string().min(2, { message: "Name is too short" }),
   email: z.string().email({ message: "Invalid email" }),
   password: z.string().min(6, { message: "Password is too short" }),
 });
 
 export type Schema = z.infer<typeof schema>;
 
-const RegisterModal = () => {
-  const registerModal = useRegisterModal();
+const LoginModal = () => {
+  const router = useRouter();
   const loginModal = useLoginModal();
+  const registerModal = useRegisterModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -35,7 +37,6 @@ const RegisterModal = () => {
     formState: { errors },
   } = useForm<Schema>({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -43,45 +44,37 @@ const RegisterModal = () => {
   });
 
   const onSubmit: SubmitHandler<Schema> = (data) => {
-    toast.success("Registered!");
     setIsLoading(true);
-    axios
-      .post("/api/register", data)
-      .then(() => {
-        toast.success("Registered!");
-        registerModal.onClose();
-        loginModal.onOpen();
-      })
-      .catch((error) => {
-        toast.error(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-        reset();
-      });
+
+    signIn("credentials", {
+      ...data,
+      redirect: false,
+    }).then((callback) => {
+      setIsLoading(false);
+
+      if (callback?.ok) {
+        toast.success("Logged in");
+        router.refresh();
+        loginModal.onClose();
+      }
+
+      if (callback?.error) {
+        toast.error(callback.error);
+      }
+    });
   };
 
   const onToggle = useCallback(() => {
-    registerModal.onClose();
-    loginModal.onOpen();
-    reset();
-  }, [registerModal, loginModal]);
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <Heading title="Welcome to Airbnb" subtitle="Create an account!" />
-      <Input
+      <Heading title="Welcome back" subtitle="Login to your account!" />
+      <Input<Schema>
         id="email"
         label="Email"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-        displayMessage
-      />
-      <Input
-        id="name"
-        label="Name"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -104,8 +97,18 @@ const RegisterModal = () => {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      <Button outline label="Continue with Google" icon={FcGoogle} onClick={() => {}} />
-      <Button outline label="Continue with Github" icon={AiFillGithub} onClick={() => {}} />
+      <Button
+        outline
+        label="Continue with Google"
+        icon={FcGoogle}
+        onClick={() => signIn("google")}
+      />
+      <Button
+        outline
+        label="Continue with Github"
+        icon={AiFillGithub}
+        onClick={() => signIn("github")}
+      />
       <div
         className="
           text-neutral-500 
@@ -115,7 +118,7 @@ const RegisterModal = () => {
         "
       >
         <p>
-          Already have an account?
+          First time using Airbnb?
           <span
             onClick={onToggle}
             className="
@@ -124,8 +127,7 @@ const RegisterModal = () => {
               hover:underline
             "
           >
-            {" "}
-            Log in
+            Create an account
           </span>
         </p>
       </div>
@@ -135,11 +137,11 @@ const RegisterModal = () => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={registerModal.isOpen}
-      title="Register"
+      isOpen={loginModal.isOpen}
+      title="Login"
       actionLabel="Continue"
       onClose={() => {
-        registerModal.onClose();
+        loginModal.onClose();
         reset();
       }}
       onSubmit={handleSubmit(onSubmit)}
@@ -148,4 +150,4 @@ const RegisterModal = () => {
     />
   );
 };
-export default RegisterModal;
+export default LoginModal;
