@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import axios from "axios";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { SubmitHandler, useForm } from "react-hook-form";

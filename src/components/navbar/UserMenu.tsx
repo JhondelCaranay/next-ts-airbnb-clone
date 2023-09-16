@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import useRegisterModal from "@/hooks/zustand/useRegisterModal";
 import useLoginModal from "@/hooks/zustand/useLoginModal";
 import { SafeUser } from "@/types";
+import useRentModal from "@/hooks/zustand/useRentModal";
 
 type UserMenuProps = {
   currentUser?: SafeUser | null;
@@ -19,6 +20,7 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
 
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
+  const rentModal = useRentModal();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,19 +28,19 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
     setIsOpen((value) => !value);
   }, []);
 
-  // const onRent = useCallback(() => {
-  //   if (!currentUser) {
-  //     return loginModal.onOpen();
-  //   }
+  const onRent = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
 
-  //   rentModal.onOpen();
-  // }, [loginModal, rentModal, currentUser]);
+    rentModal.onOpen();
+  }, [loginModal, rentModal, currentUser]);
 
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div
-          onClick={() => {}}
+          onClick={onRent}
           className="
             hidden
             md:block
