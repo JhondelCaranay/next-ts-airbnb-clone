@@ -10,6 +10,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
+
   const {
     title,
     description,
@@ -22,11 +23,17 @@ export async function POST(request: Request) {
     price,
   } = body;
 
-  Object.keys(body).forEach((value: any) => {
-    if (!body[value]) {
-      NextResponse.error();
-    }
-  });
+  // validate body
+  if (!title || !description || !imageSrc || !category || !location || !price) {
+    return NextResponse.json({ message: "Please fill out all fields" }, { status: 400 });
+    // return NextResponse.error();
+  }
+
+  //   Object.keys(body).forEach((value: any) => {
+  //     if (!body[value]) {
+  //       NextResponse.error();
+  //     }
+  //   });
 
   const listing = await prisma.listing.create({
     data: {

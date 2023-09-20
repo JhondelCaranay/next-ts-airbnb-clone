@@ -85,8 +85,12 @@ const RentModal = () => {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log("====================================");
+    console.log("watch", watch());
+    console.log("====================================");
+
     if (step !== STEPS.PRICE) {
-      return onNext();  
+      return onNext();
     }
 
     setIsLoading(true);
@@ -254,10 +258,13 @@ const RentModal = () => {
       title="Airbnb your home!"
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
-      // onSubmit={onNext}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      onClose={rentModal.onClose}
+      onClose={() => {
+        reset();
+        setStep(STEPS.CATEGORY);
+        rentModal.onClose();
+      }}
       body={bodyContent}
     />
   );
