@@ -1,15 +1,18 @@
-"use client";
-
 import { SafeUser } from "@/types";
 import Container from "../Container";
 import Categories from "./Categories";
 import Logo from "./Logo";
 import Search from "./Search";
 import UserMenu from "./UserMenu";
+import { Suspense } from "react";
 
 type NavbarProps = {
   currentUser?: SafeUser | null;
 };
+
+function CategoriesFallback() {
+  return <>placeholder</>;
+}
 
 const Navbar = ({ currentUser }: NavbarProps) => {
   return (
@@ -32,7 +35,9 @@ const Navbar = ({ currentUser }: NavbarProps) => {
           </div>
         </Container>
       </div>
-      <Categories />
+      <Suspense fallback={<CategoriesFallback />}>
+        <Categories />
+      </Suspense>
     </div>
   );
 };

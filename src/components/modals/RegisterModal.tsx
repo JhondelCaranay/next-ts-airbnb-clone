@@ -65,7 +65,7 @@ const RegisterModal = () => {
     registerModal.onClose();
     loginModal.onOpen();
     reset();
-  }, [registerModal, loginModal]);
+  }, [reset, registerModal, loginModal]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

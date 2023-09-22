@@ -31,7 +31,7 @@ const CategoryBox = ({ icon: Icon, label, selected }: CategoryBoxProps) => {
     };
 
     // delete category if already selected
-    if (searchParams?.get("category") === label) {
+    if (searchParams.get("category") === label) {
       delete updatedQuery.category;
     }
 

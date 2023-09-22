@@ -1,16 +1,29 @@
 import getCurrentUser from "@/actions/getCurrentUser";
-import getListings, { type IListingsParams } from "@/actions/getListings";
+import getListings from "@/actions/getListings";
 import ClientOnly from "@/components/ClientOnly";
 import Container from "@/components/Container";
 import EmptyState from "@/components/EmptyState";
 import ListingCard from "@/components/listings/ListingCard";
 
 type HomeProps = {
-  searchParams: IListingsParams;
+  params: IListingsParams;
 };
 
-export default async function Home({ searchParams }: HomeProps) {
-  const listings = await getListings(searchParams);
+type IListingsParams = {
+  userId?: string;
+  guestCount?: number;
+  roomCount?: number;
+  bathroomCount?: number;
+  startDate?: string;
+  endDate?: string;
+  locationValue?: string;
+  category?: string;
+};
+
+// export const dynamic = "force-dynamic";
+
+export default async function Home({ params }: HomeProps) {
+  const listings = await getListings(params);
   const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {

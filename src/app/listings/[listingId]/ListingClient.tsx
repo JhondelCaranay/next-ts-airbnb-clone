@@ -3,7 +3,7 @@
 import Container from "@/components/Container";
 import ListingHead from "@/components/listings/ListingHead";
 import ListingInfo from "@/components/listings/ListingInfo";
-// import ListingReservation from "@/components/listings/ListingReservation";
+import ListingReservation from "@/components/listings/ListingReservation";
 import { categories } from "@/components/navbar/Categories";
 import useLoginModal from "@/hooks/zustand/useLoginModal";
 import { SafeListing, SafeReservation, SafeUser } from "@/types";
@@ -46,6 +46,10 @@ const ListingClient = ({ listing, reservations = [], currentUser }: ListingClien
     return dates;
   }, [reservations]);
 
+  // console.log("====================================");
+  // console.log("disabledDates", disabledDates);
+  // console.log("====================================");
+
   const category = useMemo(() => {
     return categories.find((items) => items.label === listing.category);
   }, [listing.category]);
@@ -59,7 +63,6 @@ const ListingClient = ({ listing, reservations = [], currentUser }: ListingClien
       return loginModal.onOpen();
     }
     setIsLoading(true);
-
     axios
       .post("/api/reservations", {
         totalPrice,
@@ -126,7 +129,7 @@ const ListingClient = ({ listing, reservations = [], currentUser }: ListingClien
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
             />
-            {/* <div
+            <div
               className="
                   order-first 
                   mb-10 
@@ -143,7 +146,7 @@ const ListingClient = ({ listing, reservations = [], currentUser }: ListingClien
                 disabled={isLoading}
                 disabledDates={disabledDates}
               />
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
