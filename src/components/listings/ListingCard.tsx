@@ -18,7 +18,6 @@ type ListingCardProps = {
   actionId?: string;
   currentUser?: SafeUser | null;
 };
-
 const ListingCard = ({
   data,
   reservation,
