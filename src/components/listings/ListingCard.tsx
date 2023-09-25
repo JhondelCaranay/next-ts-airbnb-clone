@@ -8,6 +8,8 @@ import { format } from "date-fns";
 import Button from "../Button";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
+import Link from "next/link";
+import { AiOutlineEye } from "react-icons/ai";
 
 type ListingCardProps = {
   data: SafeListing;
@@ -66,7 +68,7 @@ const ListingCard = ({
 
   return (
     <div
-      onClick={() => router.push(`/listings/${data.id}`)}
+      // onClick={() => router.push(`/listings/${data.id}`)}
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">
@@ -102,8 +104,15 @@ const ListingCard = ({
             <HeartButton listingId={data.id} currentUser={currentUser} />
           </div>
         </div>
-        <div className="font-semibold text-lg">
-          {location?.region}, {location?.label}
+        <div className="font-semibold text-lg flex flex-row justify-between items-center">
+          <span>
+            {location?.region}, {location?.label}
+          </span>
+          <Link href={`/listings/${data.id}`}>
+            <span className="text-sm text-neutral-500 ml-2">
+              <AiOutlineEye className="inline-block" size={25} />
+            </span>
+          </Link>
         </div>
         <div className="font-light text-neutral-500">{reservationDate || data.category}</div>
         <div className="flex flex-row items-center gap-1">

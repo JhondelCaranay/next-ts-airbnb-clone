@@ -86,9 +86,9 @@ const RentModal = () => {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log("====================================");
-    console.log("watch", watch());
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log("watch", watch());
+    // console.log("====================================");
 
     if (step !== STEPS.PRICE) {
       return onNext();

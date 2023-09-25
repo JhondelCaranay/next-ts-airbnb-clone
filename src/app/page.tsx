@@ -9,25 +9,20 @@ type HomeProps = {
   searchParams: IListingsParams;
 };
 
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 export default async function Home({ searchParams }: HomeProps) {
   const listings = await getListings(searchParams);
   const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {
-    return (
-      <ClientOnly>
-        <EmptyState showReset />
-      </ClientOnly>
-    );
+    return <EmptyState showReset />;
   }
 
   return (
-    <ClientOnly>
-      <Container>
-        <div
-          className="
+    <Container>
+      <div
+        className="
             pt-24
             grid 
             grid-cols-1 
@@ -38,12 +33,11 @@ export default async function Home({ searchParams }: HomeProps) {
             2xl:grid-cols-6
             gap-8
           "
-        >
-          {listings.map((listing) => (
-            <ListingCard currentUser={currentUser} key={listing.id} data={listing} />
-          ))}
-        </div>
-      </Container>
-    </ClientOnly>
+      >
+        {listings.map((listing) => (
+          <ListingCard currentUser={currentUser} key={listing.id} data={listing} />
+        ))}
+      </div>
+    </Container>
   );
 }

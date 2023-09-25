@@ -1,7 +1,6 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import getListingById from "@/actions/getListingById";
 import getReservations from "@/actions/getReservations";
-import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import ListingClient from "./ListingClient";
 import prisma from "@/utils/prisma";
@@ -31,17 +30,9 @@ const ListingPage = async ({ params }: ListingPageProps) => {
   ]);
 
   if (!listing) {
-    return (
-      <ClientOnly>
-        <EmptyState />
-      </ClientOnly>
-    );
+    return <EmptyState />;
   }
 
-  return (
-    <ClientOnly>
-      <ListingClient listing={listing} reservations={reservations} currentUser={currentUser} />
-    </ClientOnly>
-  );
+  return <ListingClient listing={listing} reservations={reservations} currentUser={currentUser} />;
 };
 export default ListingPage;
