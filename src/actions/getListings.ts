@@ -75,6 +75,10 @@ export default async function getListings(params: IListingsParams) {
       };
     }
 
+    console.log("====================================");
+    console.log("query", query);
+    console.log("====================================");
+
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
